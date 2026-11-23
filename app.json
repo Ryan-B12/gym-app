@@ -1,29 +1,49 @@
 {
   "expo": {
-    "name": "gym-app",
+    "name": "Pact Fitness",
     "slug": "gym-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.sanctuaryinc.gymapp",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Used once when you start a workout to check if you're at your gym. Your location is never stored.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "package": "com.sanctuaryinc.gymapp",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router",
-      "expo-image"
-    ]
+      "expo-image",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Used once when you start a workout to check if you're at your gym. Your location is never stored."
+        }
+      ],
+      [
+        "expo-notifications",
+        {}
+      ]
+    ],
+    "scheme": "gymapp",
+    "backgroundColor": "#0E0F12",
+    "splash": {
+      "backgroundColor": "#0E0F12"
+    }
   }
 }
