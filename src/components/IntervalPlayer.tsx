@@ -63,8 +63,8 @@ function Player({ block, onDone, onClose }: { block: IntervalBlockRecord; onDone
       </Row>
       <Progress value={idx / timeline.length} height={4} />
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-        <T style={{ color, fontSize: 22, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1 }}>{label}</T>
-        {!finished ? <T style={{ color: C.text, fontSize: 96, fontWeight: '800', fontVariant: ['tabular-nums'] }} accessibilityLiveRegion="polite">{left}</T> : null}
+        <T style={{ color, fontSize: 22, lineHeight: 28, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1 }}>{label}</T>
+        {!finished ? <T style={{ color: C.text, fontSize: 96, lineHeight: 112, fontWeight: '800', fontVariant: ['tabular-nums'] }} accessibilityLiveRegion="polite">{left}</T> : null}
         {!finished && ex ? (
           <>
             <T style={{ ...F.h2, textAlign: 'center' }}>{ph.kind === 'work' ? ex.name : `Next: ${ex.name}`}</T>

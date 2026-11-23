@@ -25,8 +25,8 @@ export const C = {
 };
 
 export const F = {
-  h1: { fontSize: 28, fontWeight: '800' as const, color: C.text, letterSpacing: -0.3 },
-  h2: { fontSize: 20, fontWeight: '700' as const, color: C.text },
+  h1: { fontSize: 28, lineHeight: 36, fontWeight: '800' as const, color: C.text, letterSpacing: -0.3 },
+  h2: { fontSize: 20, lineHeight: 26, fontWeight: '700' as const, color: C.text },
   h3: { fontSize: 16, fontWeight: '700' as const, color: C.text },
   body: { fontSize: 15, color: C.text, lineHeight: 21 },
   sub: { fontSize: 14, color: C.sub, lineHeight: 20 },

@@ -160,7 +160,7 @@ export default function Workout() {
             <Button title="Finish" small onPress={() => setFinishOpen(true)} />
           </Row>
           <Row style={{ justifyContent: 'space-between' }}>
-            <T style={F.h1} numberOfLines={1}>{active.title}</T>
+            <T style={[F.h1, { flex: 1 }]} numberOfLines={1}>{active.title}</T>
             <T style={{ ...F.h3, color: C.sub, fontVariant: ['tabular-nums'] }}>{clock(elapsed)}</T>
           </Row>
           {active.verifiedAtGym ? <Badge label="Verified at gym" icon="location" /> : null}
@@ -236,13 +236,13 @@ export default function Workout() {
                     <T style={{ width: 34, color: C.sub }}>{i + 1}</T>
                     {!timed ? (
                       <TextInput
-                        style={[ui.input, { flex: 1, height: 46, textAlign: 'center' }, st.done && { opacity: 0.6 }]}
+                        style={[ui.input, { flex: 1, minWidth: 0, width: 0, height: 46, textAlign: 'center' }, st.done && { opacity: 0.6 }]}
                         value={st.weight == null ? '' : String(st.weight)} placeholder={bw ? 'BW' : '0'} placeholderTextColor={C.dim}
                         keyboardType="decimal-pad" onChangeText={(t) => setField(e, i, 'weight', t)} accessibilityLabel={`Set ${i + 1} weight`}
                       />
                     ) : null}
                     <TextInput
-                      style={[ui.input, { flex: 1, height: 46, textAlign: 'center' }, st.done && { opacity: 0.6 }]}
+                      style={[ui.input, { flex: 1, minWidth: 0, width: 0, height: 46, textAlign: 'center' }, st.done && { opacity: 0.6 }]}
                       value={timed ? (st.seconds == null ? '' : String(st.seconds)) : (st.reps == null ? '' : String(st.reps))}
                       placeholder="0" placeholderTextColor={C.dim} keyboardType="number-pad"
                       onChangeText={(t) => setField(e, i, timed ? 'seconds' : 'reps', t)} accessibilityLabel={`Set ${i + 1} ${timed ? 'seconds' : 'reps'}`}

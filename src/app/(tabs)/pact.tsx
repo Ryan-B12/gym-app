@@ -133,7 +133,10 @@ export default function PactTab() {
             <T>
               {last.members.map((m) => `${m.user_id === me.userId ? 'You' : partner.name} ${m.paused ? 'paused' : `${m.count}/${pact.goal}`}`).join(' · ')}
             </T>
-            <T style={F.h2}>{last.outcome === 'both_hit' ? 'You both made it.' : last.outcome === 'both_missed' ? 'Both missed. Call it even.' : ''}</T>
+            <T style={F.h2}>
+              {last.outcome === 'both_hit' ? 'You both made it.' : last.outcome === 'both_missed' ? 'Both missed. Call it even.'
+                : last.members.find((m) => !m.hit)?.user_id === me.userId ? 'You missed this one.' : `${partner.name} missed this one.`}
+            </T>
           </Card>
         ) : null}
 

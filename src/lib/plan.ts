@@ -216,8 +216,10 @@ function conditioningPool(ctx: Ctx): Exercise[] {
   return ids.map((id) => getExercise(id)).filter((e): e is Exercise => !!e && allowed(e, ctx));
 }
 
-function intervalBlock(ctx: Ctx, minutes: number, title: string, moves: number): Block | null {
-  const pool = conditioningPool(ctx);
+function intervalBlock(ctx: Ctx, minutes: number, title: string, moves: number, avoid: Set<string> = new Set()): Block | null {
+  const all = conditioningPool(ctx);
+  const fresh = all.filter((e) => !avoid.has(e.id));
+  const pool = fresh.length >= moves ? fresh : all;
   if (!pool.length) return null;
   const { workSec, restSec } = intervalTiming(ctx.input.level, ctx.input.conservative);
   // rotate the pool by a seeded amount so different days get different moves
@@ -295,7 +297,7 @@ function hiitDay(key: string, ctx: Ctx, idx: number): PlanDay {
   const moves = ctx.input.level === 'beginner' || ctx.input.conservative ? 4 : 5;
   if (left >= 28) {
     const a = intervalBlock(ctx, left / 2, 'Intervals 1', moves);
-    const b = intervalBlock(ctx, left / 2, 'Intervals 2', moves);
+    const b = intervalBlock(ctx, left / 2, 'Intervals 2', moves, new Set(a?.items.map((i) => i.exerciseId)));
     if (a) blocks.push(a);
     if (b) blocks.push(b);
   } else {

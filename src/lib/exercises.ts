@@ -26,7 +26,7 @@ export const PLAN_BLOCKLIST = new Set([
 
 /** Exercises that are harder than the dataset's label says. */
 export const LEVEL_OVERRIDE: Record<string, 1 | 2 | 3> = {
-  Pullups: 2, 'Chin-Up': 2, 'V-Bar_Pullup': 2, 'Dips_-_Triceps_Version': 2, Barbell_Deadlift: 2,
+  Pullups: 2, 'Chin-Up': 2, Knee_Tuck_Jump: 2, 'V-Bar_Pullup': 2, 'Dips_-_Triceps_Version': 2, Barbell_Deadlift: 2,
 };
 
 export function effectiveLevel(ex: Exercise): number {

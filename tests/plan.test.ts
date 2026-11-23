@@ -139,3 +139,14 @@ test('phase 2 changes exercises a bit', () => {
   const a = generatePlan({ ...base, gear: FULL_GYM }, 1); const b = generatePlan({ ...base, gear: FULL_GYM }, 2);
   assert.notDeepEqual(allItems(a).map((i) => i.exerciseId), allItems(b).map((i) => i.exerciseId));
 });
+
+test('two HIIT blocks in one day use different moves when possible', () => {
+  const p = generatePlan({ ...base, hiit: 'lots', minutesPerSession: 45, gear: ['bands', 'dumbbell'] });
+  for (const d of p.days.filter((x) => x.kind === 'hiit')) {
+    const blocks = d.blocks.filter((b) => b.type === 'interval');
+    if (blocks.length === 2) {
+      const a = new Set(blocks[0].items.map((i) => i.exerciseId));
+      assert.ok(blocks[1].items.every((i) => !a.has(i.exerciseId)), d.title);
+    }
+  }
+});
