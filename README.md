@@ -61,7 +61,7 @@ EAS builds in the cloud, so you don't need a Mac. Before submitting:
 
 | | |
 |---|---|
-| `npm test` | 39 logic tests: plan builder, coach rules, pact math, swaps |
+| `npm test` | 40 logic tests: plan builder, coach rules, pact math, swaps |
 | `npm run test:db` | migration + security tests against a local Postgres (`PGHOST`/`PGPORT` env) |
 | `npm run typecheck` | TypeScript |
 | `npx eslint src tests` | lint |
