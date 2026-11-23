@@ -1,10 +1,11 @@
 import * as Location from 'expo-location';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Platform, Switch, View } from 'react-native';
 import { Button, C, Card, Chip, F, Field, Icon, Row, Screen, T } from '../../components/ui';
 import { AREA_LABELS } from '../../lib/exercises';
 import { generatePlan } from '../../lib/plan';
+import { DEFAULT_PREFS, loadPrefs, registerForPush, savePrefs, type NotifyPrefs } from '../../lib/push';
 import { setReminders } from '../../lib/reminders';
 import { screeningFlagged } from '../../lib/screening';
 import { DEMO, errorText, supabase } from '../../lib/supabase';
@@ -23,6 +24,20 @@ export default function Me() {
   const email = useSession((s) => s.session?.user.email);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
+  const [prefs, setPrefs] = useState<NotifyPrefs>(DEFAULT_PREFS);
+  const [pushNote, setPushNote] = useState('');
+  useEffect(() => { loadPrefs().then(setPrefs).catch(() => {}); }, []);
+
+  const togglePref = async (k: keyof NotifyPrefs, v: boolean) => {
+    const next = { ...prefs, [k]: v };
+    setPrefs(next);
+    if (v) {
+      const r = await registerForPush(true);
+      setPushNote(r === 'denied' ? 'Notifications are off for this app. Turn them on in iPhone Settings → Notifications.'
+        : r === 'no-project' || r === 'unsupported' ? 'Partner notifications work in the App Store / TestFlight version of the app.' : '');
+    }
+    try { await savePrefs(next); } catch (e) { setPushNote(errorText(e)); }
+  };
 
   const saveProfile = async () => {
     setSaving(true); setMsg('');
@@ -124,10 +139,29 @@ export default function Me() {
       </Card>
 
       <Card>
+        <T style={F.h3}>Notifications</T>
+        {([
+          ['partner_workouts', 'When your partner trains'],
+          ['cheers', 'When your partner cheers you'],
+          ['pact', 'Pact updates', 'Joins, approvals, weekly results'],
+          ['nudges', 'Friday check-in', 'Only if you\'re short of your goal'],
+        ] as [keyof NotifyPrefs, string, string?][]).map(([k, label, sub]) => (
+          <Row key={k} style={{ justifyContent: 'space-between' }}>
+            <View style={{ flex: 1 }}>
+              <T>{label}</T>
+              {sub ? <T style={F.small}>{sub}</T> : null}
+            </View>
+            <Switch value={prefs[k]} onValueChange={(v) => togglePref(k, v)} trackColor={{ true: C.me, false: C.line }} accessibilityLabel={label} />
+          </Row>
+        ))}
+        {pushNote ? <T style={F.small}>{pushNote}</T> : null}
+      </Card>
+
+      <Card>
         <Row style={{ justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
             <T style={F.h3}>Weekly reminders</T>
-            <T style={F.small}>Thursday evening and Sunday morning</T>
+            <T style={F.small}>On this phone: Thursday evening and Sunday morning</T>
           </View>
           <Switch value={remindersOn} onValueChange={async (v) => { const ok = await setReminders(v); useStore.setState({ remindersOn: v && ok }); }} trackColor={{ true: C.me, false: C.line }} accessibilityLabel="Weekly reminders" />
         </Row>

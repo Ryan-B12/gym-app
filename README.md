@@ -26,7 +26,7 @@ Want to look around without an account? Run `npm run demo`. It skips sign-in and
 
 ## One-time Supabase setup (project `gym-app`)
 
-1. **Database**: Supabase → SQL Editor → New query. Paste all of `supabase/migrations/20261123000000_init.sql` and click **Run**.
+1. **Database**: Supabase → SQL Editor → New query. Paste all of `supabase/migrations/20261123000000_init.sql` and click **Run**. Then do the same with `20261123010000_push.sql` (partner notifications).
    - Check: `select jobname, schedule from cron.job;` should list `settle-pacts`. If pg_cron didn't turn on, enable it under Integrations → Cron and run the last block of the file again.
 2. **Email code**: Authentication → Emails → **Magic Link** template. Replace the body with:
    ```html
@@ -37,6 +37,15 @@ Want to look around without an account? Run `npm run demo`. It skips sign-in and
 4. **App Review account**: Authentication → Users → Add user, with an email and password. Give these to Apple in App Store Connect ("Sign-in required"). In the app they tap **Sign in with a password**.
 
 The app's Supabase URL and publishable key are in `src/config/env.ts`. They're meant to be public; row level security protects the data.
+
+## Partner notifications
+
+The database sends notifications through Expo's free push service when your partner trains, cheers you, joins or asks for approval, when a week settles, and on Friday at 6pm if you're short of your goal. Each type can be switched off in the Me tab. Every message is also recorded in the `notification_log` table, so you can check what went out.
+
+To turn them on for real phones:
+1. On your PC, in the project folder: `npx eas-cli@latest init`. This links the app to your Expo account and adds a `projectId` to `app.json`.
+2. On your first `eas build -p ios`, answer **yes** when it offers to set up push notifications. It creates the Apple push key for you.
+3. Test with two phones signed in as two accounts in one pact. Notifications don't arrive in a simulator. In Expo Go they may not arrive either, so use a TestFlight build.
 
 ## Ship to the App Store
 
@@ -50,10 +59,10 @@ npx eas-cli@latest submit -p ios
 
 EAS builds in the cloud, so you don't need a Mac. Before submitting:
 
-- **Icon and splash**: `assets/icon.png` is still Expo's placeholder. Replace it with a 1024×1024 PNG.
+- **Icon**: `assets/icon.png` is a first-pass design (two linked rings, orange for you and blue for your partner), drawn by `scripts/icon.py`. Swap in a designer's version any time.
 - **App name**: "Pact Fitness" is a working name (`app.json`). Check it's free in App Store Connect.
 - **Bundle ID**: `com.sanctuaryinc.gymapp` (`app.json`). Change it now if you want a different one. It can't change after the first upload.
-- **Privacy Policy URL** and **Terms**: `src/app/legal.tsx` is a placeholder. Have a lawyer write real ones and host them.
+- **Privacy Policy URL** and **Terms**: drafts are in `docs/legal/`. Fill in the [brackets], have a lawyer review them, then host the privacy policy at a public URL for App Store Connect. After editing, run `python3 scripts/build-legal.py` to update the in-app copy.
 - **App Privacy labels**: email, fitness/health info (health check answers, body stats, workouts), coarse location (used once, not stored). None used for tracking.
 - **Money stakes**: the app only keeps score between friends and never moves money. Say that plainly in the review notes; App Review can question anything that looks like betting.
 

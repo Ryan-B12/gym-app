@@ -8,6 +8,7 @@ import { FULL_GYM, GEAR_LABELS, getExercise } from '../lib/exercises';
 import { generatePlan } from '../lib/plan';
 import { SCREENING_QUESTIONS, oldEnough, screeningFlagged } from '../lib/screening';
 import { errorText } from '../lib/supabase';
+import { registerForPush } from '../lib/push';
 import { pushConsents, pushOnboarding } from '../lib/sync';
 import type { Gear, Goal, Level } from '../lib/types';
 import { useStore } from '../state/store';
@@ -109,6 +110,7 @@ export default function Onboarding() {
       // saved on the phone; it will sync later
       console.warn('sync later', errorText(e));
     }
+    if (!editing) await registerForPush(true).catch(() => {});
     setBusy(false);
     router.replace('/(tabs)');
   };

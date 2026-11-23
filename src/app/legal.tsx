@@ -1,23 +1,29 @@
-import { Card, F, Screen, T } from '../components/ui';
+import { useState } from 'react';
+import { View } from 'react-native';
+import { C, Card, Chip, F, Row, Screen, T } from '../components/ui';
+import { LEGAL } from '../content/legal';
 
-// PLACEHOLDER — have a lawyer write the real Terms and Privacy Policy before launch.
+// DRAFT text from docs/legal/. Have a lawyer finalize it before launch.
 export default function Legal() {
+  const [tab, setTab] = useState<'terms' | 'privacy'>('terms');
   return (
     <Screen>
-      <T style={F.h2}>Terms of Use (draft)</T>
+      <Row>
+        <Chip label="Terms of Use" on={tab === 'terms'} onPress={() => setTab('terms')} />
+        <Chip label="Privacy" on={tab === 'privacy'} onPress={() => setTab('privacy')} />
+      </Row>
       <Card>
-        <T>This app gives general fitness information. It is not medical advice and is not a substitute for a doctor or a certified trainer. Talk to a doctor before starting any exercise program.</T>
-        <T>Coach suggestions are only suggestions. You decide what weight to lift and how hard to train, and you train at your own risk.</T>
-        <T>You must be 18 or older. Partner pacts are an honor system between friends. The app never holds, sends or collects money.</T>
-        <T style={F.small}>Draft for testing only. Not final terms.</T>
-      </Card>
-      <T style={F.h2}>Privacy (draft)</T>
-      <Card>
-        <T>We store your account email, workouts, plan and the answers you give us. Health check answers, pain notes and body stats are visible only to you.</T>
-        <T>Your pact partner can see your name, your workouts and whether you trained at your gym. They never see your health answers, body stats or why you paused.</T>
-        <T>Gym check-in uses your location once when you start a workout to answer "at the gym: yes or no." We never store where you are.</T>
-        <T>You can delete your account and all your data any time from the Me tab.</T>
-        <T style={F.small}>Draft for testing only. Not a final policy.</T>
+        {LEGAL[tab].map((b, i) => {
+          if (b.t === 'title') return <T key={i} style={F.h2}>{b.x}</T>;
+          if (b.t === 'h') return <T key={i} style={[F.h3, { marginTop: 8 }]}>{b.x}</T>;
+          if (b.t === 'note') return <T key={i} style={[F.small, { color: C.warn }]}>{b.x}</T>;
+          if (b.t === 'li') return (
+            <View key={i} style={{ flexDirection: 'row', gap: 8 }}>
+              <T style={{ color: C.sub }}>•</T><T style={{ flex: 1 }}>{b.x}</T>
+            </View>
+          );
+          return <T key={i}>{b.x}</T>;
+        })}
       </Card>
     </Screen>
   );

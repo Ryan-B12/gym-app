@@ -12,4 +12,4 @@
 - **Gym check-in** stores only yes/no. The gym's own spot is saved on the phone only.
 - **Partners see**: name, Venmo handle, workouts and sets, gym badge. **Never**: health answers, pain flags, body stats, age, pause reasons (no reason is collected).
 - **18+ only** (money stakes).
-- **Push notifications to your partner** are not in v1. There are local weekly reminders instead (Thursday evening, Sunday morning).
+- **Partner notifications** are sent straight from the database (pg_net → Expo push API). There is no extra server, and they're logged in `notification_log`. Workouts that sync more than 12 hours late don't notify. Each category can be switched off, and the Friday nudge goes out once a week, only if you're short. Local weekly reminders are also available.
