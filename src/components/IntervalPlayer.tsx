@@ -1,11 +1,11 @@
 import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image';
 import { useKeepAwake } from 'expo-keep-awake';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Modal, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getExercise } from '../lib/exercises';
 import type { IntervalBlockRecord } from '../state/store';
+import { ExerciseImage } from './ExerciseImage';
 import { Button, C, F, Progress, Row, T } from './ui';
 
 type Phase = { kind: 'ready' | 'work' | 'rest' | 'round'; seconds: number; exerciseId?: string; round: number; nextId?: string };
@@ -68,7 +68,7 @@ function Player({ block, onDone, onClose }: { block: IntervalBlockRecord; onDone
         {!finished && ex ? (
           <>
             <T style={{ ...F.h2, textAlign: 'center' }}>{ph.kind === 'work' ? ex.name : `Next: ${ex.name}`}</T>
-            {ex.images[0] ? <Image source={ex.images[0]} style={{ width: 220, height: 150, borderRadius: 16 }} contentFit="cover" accessibilityLabel={ex.name} /> : null}
+            {ex.images[0] ? <ExerciseImage ex={ex} style={{ width: 220, height: 150, borderRadius: 16 }} /> : null}
           </>
         ) : null}
         {finished ? <T style={F.sub}>Nice work. {block.rounds} rounds done.</T> : null}

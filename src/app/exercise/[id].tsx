@@ -1,7 +1,7 @@
-import { Image } from 'expo-image';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { ExerciseImage } from '../../components/ExerciseImage';
 import { Badge, C, Card, F, Icon, Row, Screen, T } from '../../components/ui';
 import { AREA_LABELS, GEAR_LABELS, PATTERN_LABELS, getExercise } from '../../lib/exercises';
 import { exerciseHistory } from '../../lib/history';
@@ -28,7 +28,7 @@ export default function ExerciseDetail() {
       <Stack.Screen options={{ title: '' }} />
       {ex.images.length ? (
         <View style={{ gap: 6 }}>
-          <Image source={ex.images[frame]} style={{ width: '100%', aspectRatio: 1.45, borderRadius: 20, backgroundColor: C.card2 }} contentFit="cover" transition={150} accessibilityLabel={`${ex.name}, ${frame === 0 ? 'start' : 'end'} position`} />
+          <ExerciseImage ex={ex} frame={frame} style={{ width: '100%', aspectRatio: 1.45, borderRadius: 20 }} label={`${ex.name}, ${frame === 0 ? 'start' : 'end'} position`} />
           <T style={F.small}>Photos: Free Exercise DB (public domain)</T>
         </View>
       ) : (

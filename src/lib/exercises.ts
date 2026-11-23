@@ -1,7 +1,15 @@
 import data from '../data/exercises.json';
 import type { BodyArea, Exercise, Gear, Pattern } from './types';
 
-export const EXERCISES = data as Exercise[];
+/** Demo builds hosted where outside images can't load ship their own copies of the photos. */
+const LOCAL_IMG = process.env.EXPO_PUBLIC_LOCAL_IMAGES === '1';
+/** In those builds every photo, in exercises.json order, is one cell of a photo sheet (see ExerciseImage). */
+let cell = 0;
+function localize(e: Exercise): Exercise {
+  if (!LOCAL_IMG || !e.images.length) return e;
+  return { ...e, images: e.images.map(() => `sprite:${cell++}`) };
+}
+export const EXERCISES = (data as Exercise[]).map(localize);
 const BY_ID = new Map(EXERCISES.map((e) => [e.id, e]));
 
 export function getExercise(id: string): Exercise | undefined {

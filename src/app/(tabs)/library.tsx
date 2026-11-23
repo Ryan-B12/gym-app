@@ -1,8 +1,8 @@
-import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ExerciseImage } from '../../components/ExerciseImage';
 import { C, Chip, F, Icon, Row, T, s as ui } from '../../components/ui';
 import { EXERCISES, PATTERN_LABELS, hasGear } from '../../lib/exercises';
 import type { Exercise } from '../../lib/types';
@@ -53,9 +53,7 @@ export default function Library() {
         renderItem={({ item: e }) => (
           <Pressable onPress={() => router.push(`/exercise/${e.id}`)} accessibilityRole="link" accessibilityLabel={e.name}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: C.line }}>
-            {e.images[0] ? <Image source={e.images[0]} style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: C.card2 }} contentFit="cover" recyclingKey={e.id} /> : (
-              <View style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: C.card2, alignItems: 'center', justifyContent: 'center' }}><Icon name="fitness" color={C.sub} /></View>
-            )}
+            <ExerciseImage ex={e} style={{ width: 56, height: 56, borderRadius: 12 }} />
             <View style={{ flex: 1, gap: 2 }}>
               <T style={F.h3} numberOfLines={1}>{e.name}</T>
               <T style={F.small} numberOfLines={1}>{PATTERN_LABELS[e.pattern]} · {e.gear.join(', ').replace(/_/g, ' ')}</T>

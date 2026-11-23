@@ -1,8 +1,8 @@
-import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ExerciseImage } from '../components/ExerciseImage';
 import { IntervalPlayer } from '../components/IntervalPlayer';
 import { Badge, Button, C, Card, Chip, F, Icon, Row, Sheet, T, s as ui } from '../components/ui';
 import { suggest, type Suggestion } from '../lib/coach';
@@ -193,9 +193,7 @@ export default function Workout() {
             return (
               <Card key={e.id}>
                 <Row>
-                  {ex.images[0] ? <Image source={ex.images[0]} style={{ width: 52, height: 52, borderRadius: 12 }} contentFit="cover" accessibilityLabel={ex.name} /> : (
-                    <View style={{ width: 52, height: 52, borderRadius: 12, backgroundColor: C.card2, alignItems: 'center', justifyContent: 'center' }}><Icon name="fitness" color={C.sub} /></View>
-                  )}
+                  <ExerciseImage ex={ex} style={{ width: 52, height: 52, borderRadius: 12 }} />
                   <Pressable style={{ flex: 1, gap: 2 }} onPress={() => router.push(`/exercise/${ex.id}`)} accessibilityRole="link" accessibilityLabel={`How to do ${ex.name}`}>
                     <T style={F.h3}>{ex.name}</T>
                     <T style={F.small}>{e.sets.length} × {timed ? `${e.targetSeconds}s` : e.repRange ? `${e.repRange[0]}–${e.repRange[1]} reps` : 'reps'} · rest {e.restSec}s · How-to ›</T>
@@ -318,7 +316,7 @@ export default function Workout() {
         <T style={F.sub}>Same muscles, using the gear you said you have.</T>
         {swapList.length ? swapList.map((o) => (
           <Pressable key={o.id} onPress={() => doSwap(o.id)} accessibilityRole="button" style={[ui.choice]}>
-            {o.images[0] ? <Image source={o.images[0]} style={{ width: 48, height: 48, borderRadius: 10 }} contentFit="cover" /> : <Icon name="fitness" color={C.sub} />}
+            <ExerciseImage ex={o} style={{ width: 48, height: 48, borderRadius: 10 }} />
             <View style={{ flex: 1 }}>
               <T style={F.h3}>{o.name}</T>
               <T style={F.small}>{swapReason(getExercise(swapFrom!.exerciseId)!, o)}</T>
